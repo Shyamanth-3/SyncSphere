@@ -43,8 +43,9 @@ def handle_client(conn, addr):
             conn.sendall(welcome)
 
         else:
-            # Invalid initial protocol
-            print(f"[PROTOCOL ERROR] Invalid initial message from {addr}")
+            # Invalid initial protocol (could be a port scan, ngrok health check, or browser)
+            if initial_msg is not None:
+                print(f"[PROTOCOL ERROR] Invalid initial message from {addr}: {initial_msg}")
             return
 
         # Main message loop

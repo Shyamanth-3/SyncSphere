@@ -73,8 +73,10 @@ with st.sidebar:
                     presence_msg = encode_message("presence", st.session_state.username, "joined", st.session_state.room)
                     st.session_state.sock.sendall(presence_msg)
                     
-                    # Start listener thread
+                    # Start listener thread with Streamlit context so it can access st.session_state
                     listener = threading.Thread(target=receive_thread, daemon=True)
+                    from streamlit.runtime.scriptrunner import add_script_run_ctx
+                    add_script_run_ctx(listener)
                     listener.start()
                     
                     st.success("Connected!")
